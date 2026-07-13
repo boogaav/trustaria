@@ -49,3 +49,28 @@
     el.addEventListener("change", update);
   }
 })();
+
+(() => {
+  for (const btn of document.querySelectorAll(".copy-btn")) {
+    btn.addEventListener("click", async () => {
+      const pre = document.getElementById(btn.dataset.copy);
+      if (!pre) return;
+      try {
+        await navigator.clipboard.writeText(pre.textContent);
+        btn.textContent = "copied";
+        btn.classList.add("done");
+        setTimeout(() => {
+          btn.textContent = "copy";
+          btn.classList.remove("done");
+        }, 1600);
+      } catch {
+        // clipboard unavailable — select the text instead
+        const range = document.createRange();
+        range.selectNodeContents(pre);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+    });
+  }
+})();

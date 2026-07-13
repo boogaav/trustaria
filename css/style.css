@@ -751,3 +751,59 @@ h2 {
   .builder { flex-direction: column; }
   .adpair { grid-template-columns: 1fr; }
 }
+
+/* ---------- agent onboarding ---------- */
+
+.mono-link {
+  font-family: var(--mono);
+  font-size: 0.95em;
+  color: var(--indigo-deep);
+}
+
+.agent-block {
+  margin-top: 24px;
+  max-width: 720px;
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(27, 27, 27, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.agent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid rgba(27, 27, 27, 0.1);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(27, 27, 27, 0.55);
+}
+
+.copy-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 12px;
+  border: 1px solid rgba(27, 27, 27, 0.25);
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(27, 27, 27, 0.7);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.copy-btn:hover { border-color: var(--indigo); color: var(--indigo); }
+
+.copy-btn.done { border-color: var(--indigo); color: var(--indigo-deep); }
+
+.agent-block pre {
+  padding: 14px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: rgba(27, 27, 27, 0.8);
+  white-space: pre-wrap;
+  word-break: break-word;
+}

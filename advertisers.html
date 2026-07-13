@@ -16,7 +16,7 @@
       <a href="index.html#network">network</a>
       <a href="index.html#protocol">protocol</a>
       <a href="advertisers.html" style="color: var(--indigo);">advertisers</a>
-      <a class="cta" href="mailto:boogaav@gmail.com?subject=Aria%20—%20Advertiser%20pilot">request access</a>
+      <a class="cta" href="https://chatbot-aria-demo.vercel.app" rel="noopener noreferrer" target="_blank">start demo</a>
     </nav>
   </div>
 </header>
@@ -130,13 +130,49 @@
   </section>
 
   <section class="block wrap">
+    <p class="eyebrow">connect your agent</p>
+    <h2>Let your AI agent<br />do the onboarding.</h2>
+    <p class="sub">The whole network is documented for machines at
+    <a class="mono-link" href="llms.txt">trustaria.xyz/llms.txt</a> — the placement contract,
+    publisher integration steps and the campaign schema. Paste one of these into your agent
+    and it can connect you.</p>
+
+    <div class="agent-block">
+      <div class="agent-head">
+        <span>for advertiser agents — compose a campaign</span>
+        <button class="copy-btn" data-copy="agent-adv" type="button">copy</button>
+      </div>
+      <pre id="agent-adv">Read https://trustaria.xyz/llms.txt — the Aria ad network spec.
+Compose an Aria campaign JSON for my brand: [YOUR BRAND + one line on
+what it sells and where]. Follow the campaign schema exactly: pick
+intent-matching aliases a model would naturally write, and include an
+honest, independent organic alternative. Then email the JSON to
+boogaav@gmail.com with subject "Aria campaign".</pre>
+    </div>
+
+    <div class="agent-block">
+      <div class="agent-head">
+        <span>for publisher agents — integrate the placements</span>
+        <button class="copy-btn" data-copy="agent-pub" type="button">copy</button>
+      </div>
+      <pre id="agent-pub">Read https://trustaria.xyz/llms.txt — the Aria ad network spec.
+Integrate Aria native ads into my chat app per the publisher steps:
+inject the sponsored-entity rule into the system prompt, render
+/ads/&lt;slug&gt; markdown links as disclosed expandable placements with an
+equal-weight organic card, add the fallback entity matcher, and report
+impression/expand/click events to POST /api/ads/event. Then email
+boogaav@gmail.com with subject "Aria publisher" to request an API key.</pre>
+    </div>
+  </section>
+
+  <section class="block wrap">
     <p class="eyebrow">get started</p>
     <h2>Put your campaign in the pilot.</h2>
     <p class="sub">Early advertisers get hands-on campaign setup and founder pricing. Try the
     live demo network first, or write to us directly.</p>
     <div class="cta-row">
-      <a class="cta-big" href="mailto:boogaav@gmail.com?subject=Aria%20—%20Advertiser%20pilot">request access</a>
-      <a class="cta-ghost" href="https://chatbot-aria-demo.vercel.app" rel="noopener noreferrer" target="_blank">try the live demo</a>
+      <a class="cta-big" href="https://chatbot-aria-demo.vercel.app" rel="noopener noreferrer" target="_blank">start demo</a>
+      <a class="cta-ghost" href="mailto:boogaav@gmail.com?subject=Aria%20—%20Advertiser%20pilot">request access</a>
     </div>
   </section>
 </main>

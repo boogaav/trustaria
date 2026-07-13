@@ -1,0 +1,92 @@
+# Aria Ad Network — agent onboarding
+
+> Aria is a native, intent-based ad network for AI chat apps ("agent apps").
+> When an assistant genuinely recommends something — a flight, a dentist, a
+> sofa — that mention becomes a disclosed, expandable placement: the sponsored
+> offer rendered next to an equally-weighted organic alternative. Targeting
+> uses conversation context only; no cookies, no user profiles. Settlement is
+> performance-based.
+>
+> This file is written for AI agents (coding agents, autonomous business
+> agents) connecting a publisher app or an advertiser campaign to the network.
+> Live demo: https://chatbot-aria-demo.vercel.app
+> Human contact / pilot access: boogaav@gmail.com
+
+## The placement contract (both sides)
+
+1. A placement is anchored to a markdown link of the form `[mention text](/ads/<campaign-slug>)` inside an assistant response.
+2. Collapsed state: the mention renders as a dashed-underlined clickable phrase inline in the sentence. No layout shift, no interruption.
+3. Expanded state (on click): two cards of identical size and styling —
+   - Card A "Sponsored": advertiser logo/initials, headline, description, CTA button linking to the advertiser URL. Always labeled "Sponsored".
+   - Card B "All options": an organic alternative (comparison site, independent review, free resource) with equal visual weight. Always labeled "Unpaid results".
+4. Placements appear only when the mention genuinely belongs in the answer. Injecting brands into answers, steering recommendations, or marking negative-context mentions is prohibited.
+5. Maximum 3 placements per response, first mention only per campaign.
+
+## For publisher agents (integrate ads into a chat app)
+
+Reference implementation: the demo app above (Next.js + Streamdown). Steps:
+
+1. SYSTEM PROMPT. Inject the sponsored entity list into your model's system
+   prompt with this rule: "When your answer NATURALLY mentions or recommends
+   one of these entities, wrap its FIRST mention in a markdown link to its
+   /ads/ path. Never add, force, or steer toward an entity because it is
+   sponsorable. Never mark negative contexts. Max 3 per response."
+2. RENDERER. In your markdown renderer, override the link component: hrefs
+   starting with `/ads/` render the placement component (collapsed entity →
+   expandable twin cards, per the contract above). Unknown slugs must degrade
+   to plain text. Note: custom URL schemes (e.g. `ad:`) are stripped by
+   common markdown sanitizers — use relative `/ads/` paths.
+3. FALLBACK MATCHER (recommended). Models mark mentions inconsistently. After
+   each response, linkify unmarked first mentions of campaign entities/aliases
+   (word-bounded, case-insensitive for generic terms, skip already-marked
+   campaigns, max 3). Apply to assistant messages only.
+4. EVENTS. Report the funnel: POST /api/ads/event with JSON body
+   `{ "type": "impression" | "expand" | "ad_click" | "organic_click",
+      "campaign": "<slug>", "chatId": "<id or null>" }`.
+   Fire impression on render (dedupe per chat+campaign), expand on first
+   expansion, clicks on CTA clicks of either card.
+5. API KEY. The hosted network API is in pilot. Email boogaav@gmail.com with
+   subject "Aria publisher" including your app URL and monthly message volume.
+
+## For advertiser agents (create a campaign)
+
+Campaign schema (JSON):
+
+{
+  "slug": "kebab-case-unique-id",
+  "entity": "Display Name",
+  "aliases": ["alternate phrasings", "area names", "generic terms"],
+  "caseInsensitive": true,
+  "category": "one of: travel-flights | travel-hotels | travel-tours | health-online | health-dental | fitness | coaching | supplements | home-design | home-furniture | writing | learning | shopping | coding | crypto | productivity",
+  "initials": "2-char logo fallback",
+  "sponsored": {
+    "title": "Brand — offer headline",
+    "description": "One sentence, concrete value. Max ~90 chars.",
+    "cta": "Action on yourdomain.com",
+    "url": "https://yourdomain.com"
+  },
+  "organic": {
+    "title": "The equally-weighted unpaid alternative",
+    "description": "An honest comparison/review/free resource for the same intent.",
+    "cta": "Compare / read / browse",
+    "url": "https://independent-source.example"
+  }
+}
+
+Notes for agents composing campaigns:
+- `aliases` drive intent matching: include the phrases a model would naturally
+  write when answering in your category (e.g. hotel campaign for Bali:
+  "Ubud", "Seminyak", "where to stay in Bali").
+- You must supply the organic alternative; placements without one are
+  rejected. Pick a genuinely independent source.
+- Set `caseInsensitive: true` for generic service terms, false for brand names.
+
+Submit: email the JSON to boogaav@gmail.com with subject "Aria campaign",
+or preview it first at https://trustaria.xyz/advertisers.html.
+
+## Links
+
+- Live demo network: https://chatbot-aria-demo.vercel.app
+- Campaign funnel dashboard (demo): https://chatbot-aria-demo.vercel.app/ads
+- Advertiser page + campaign preview: https://trustaria.xyz/advertisers.html
+- Protocol overview: https://trustaria.xyz
